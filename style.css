@@ -178,20 +178,19 @@ body {
   Responsive envelope width: width: min(90vw, 600px);
 */
 .envelope-wrapper {
-    position: relative;
+    position: absolute;
     width: min(90vw, 600px);
-    height: 220px; /* compact envelope height to fit the stack perfectly */
+    height: 380px;
     perspective: 1000px;
     cursor: pointer;
     z-index: 5;
-    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Smooth scale-out and fade-out transition */
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease;
 }
 
-/* 
-  LAYOUT CORRECTIVE RULE: 
-  The envelope wrapper does NOT disappear when open! It stays visible underneath the card.
-*/
 .envelope-wrapper.open {
+    opacity: 0;
+    transform: scale(0.85);
     pointer-events: none;
 }
 
@@ -215,7 +214,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 110px; /* exactly half of envelope height */
+    height: 180px; /* flap height */
     background-color: var(--pastel-pink-dark);
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     transform-origin: top;
@@ -245,19 +244,19 @@ body {
 /* 
   LAYOUT CORRECTIVE RULE:
   Ensure the card width is responsive: width: min(90vw, 500px);
-  We center it vertically in the flex stack by listing it before the envelope.
+  We center it absolutely in the container, layer it directly, and scale/fade it in when the envelope opens.
   This completely removes all top margins, negative margins, and upward translateY translations that pushed content outside the viewport!
 */
 .letter {
-    position: relative;
+    position: absolute;
     width: min(90vw, 500px);
-    height: 0;
-    opacity: 0;
+    /* Sized elegantly to fit fully in the screen without scrolling */
+    height: min(80vh, 520px);
     background: var(--cream);
     border-radius: 12px;
-    padding: 0 20px;
-    border: 0 dashed transparent;
-    box-shadow: none;
+    padding: 30px 20px;
+    box-shadow: 0 15px 35px var(--shadow-color);
+    border: 3px dashed var(--pastel-pink-dark);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -267,9 +266,10 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     
-    z-index: 10;
-    margin-bottom: 0;
-    transition: height 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.6s ease, margin-bottom 0.6s ease, padding 0.6s ease, border 0.6s ease, box-shadow 0.6s ease;
+    z-index: 2;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease;
     pointer-events: none;
     
     scrollbar-width: thin;
@@ -288,15 +288,12 @@ body {
     border-radius: 10px;
 }
 
-/* Revealed Card State - Stacked ABOVE the envelope with proper spacing */
+/* Revealed Card State */
 .container.open-card .letter {
-    height: min(45vh, 340px);
     opacity: 1;
-    margin-bottom: 25px; /* Perfect spacing above the envelope */
-    padding: 25px 20px;
-    border: 3px dashed var(--pastel-pink-dark);
-    box-shadow: 0 15px 35px var(--shadow-color);
+    transform: scale(1);
     pointer-events: auto;
+    z-index: 10;
 }
 
 .letter-content {
@@ -358,44 +355,13 @@ body {
     transform: scale(1.1);
 }
 
-/* Color themes for styled gift boxes */
-.gift-pink .gift-lid { background: #FF4D6D; }
-.gift-pink .gift-body { background: #FFCAD4; border-color: #FF4D6D; }
-.gift-pink .gift-ribbon { background: #FF4D6D; }
-
-.gift-green .gift-lid { background: #2EC4B6; }
-.gift-green .gift-body { background: #CBF3F0; border-color: #2EC4B6; }
-.gift-green .gift-ribbon { background: #2EC4B6; }
-
-.gift-gold .gift-lid { background: #FFB703; }
-.gift-gold .gift-body { background: #FFE066; border-color: #FFB703; }
-.gift-gold .gift-ribbon { background: #FFB703; }
-
-.gift-bow {
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%) scale(1);
-    font-size: 1.15rem;
-    z-index: 5;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
-}
-
-.gift-item:hover .gift-bow {
-    transform: translateX(-50%) scale(1.2) rotate(5deg);
-}
-
-.gift-item.open-gift .gift-bow {
-    transform: translateX(-50%) translateY(-25px) rotate(-15deg) scale(0.8);
-    opacity: 0;
-}
-
 .gift-lid {
     position: absolute;
     top: 0;
     left: -2px;
     width: 44px;
     height: 10px;
+    background: var(--primary-pink);
     border-radius: 3px;
     z-index: 2;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
@@ -407,20 +373,22 @@ body {
     left: 0;
     width: 40px;
     height: 32px;
-    border: 2px solid;
+    background: var(--pastel-pink-medium);
+    border: 2px solid var(--primary-pink);
     border-radius: 0 0 5px 5px;
     z-index: 1;
     overflow: hidden;
 }
 
-/* Ribbon Stripe on gift body */
-.gift-ribbon {
+/* Cross Ribbons on gift body */
+.gift-body::before {
+    content: '';
     position: absolute;
     top: 0;
-    left: 15px; /* Centered stripe */
+    left: 17px;
     width: 6px;
     height: 100%;
-    z-index: 2;
+    background: var(--primary-pink);
 }
 
 /* Opening Gift animation */
@@ -435,51 +403,41 @@ body {
 
 /* Pop up wish message balloon */
 .gift-wish {
-    position: absolute;
-    bottom: 55px;
+    /* 
+      FIX: Positioned fixed and centered in the viewport so it never clips,
+      remains 100% visible, and sits prominently in the middle of the screen!
+    */
+    position: fixed;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateY(15px) scale(0.7);
+    bottom: auto; /* reset absolute bottom */
+    transform: translate(-50%, -50%) scale(0.85); /* centered exactly */
+    
     background: #FFF;
-    color: #4A4A4A;
-    border: 1px solid var(--pastel-pink-medium);
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 0.72rem;
-    font-weight: 500;
-    line-height: 1.45;
-    width: 170px;
+    color: var(--primary-pink);
+    border: 2px solid var(--primary-pink); /* prominent borders */
+    padding: 20px 25px; /* modal-style spacing */
+    border-radius: 16px;
+    font-size: 0.95rem; /* larger, prominent text */
+    font-weight: 600;
+    width: min(85vw, 320px); /* responsive width */
     text-align: center;
-    box-shadow: 0 8px 25px rgba(255, 77, 109, 0.2);
+    box-shadow: 0 15px 45px rgba(255, 77, 109, 0.35); /* prominent modal shadow */
     opacity: 0;
     pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 15;
-}
-
-.gift-wish strong {
-    color: var(--primary-pink);
-    display: inline-block;
-    margin-bottom: 3px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+    z-index: 9999; /* stays above all layers and envelope/letter scroll viewports */
 }
 
 /* Speech bubble arrow */
 .gift-wish::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px 6px 0;
-    border-style: solid;
-    border-color: #FFF transparent;
-    display: block;
-    width: 0;
+    display: none; /* remove pointer arrow since it is now a centered card overlay */
 }
 
 .gift-item.open-gift .gift-wish {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 /* Friendship Badges */

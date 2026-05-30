@@ -29,7 +29,23 @@
 
     <!-- Main Container -->
     <div class="container" id="main-container">
-        <!-- The Letter / Card Inside (Listed first so it stacks vertically ABOVE the envelope) -->
+        <!-- The Interactive Envelope -->
+        <div class="envelope-wrapper" id="envelope-wrapper">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+            </div>
+            
+            <!-- Heart Seal / Button to open -->
+            <div class="heart-seal" id="heart-seal">
+                <svg viewBox="0 0 32 32" class="seal-heart">
+                    <path d="M16,28.261L4.316,16.577C1.492,13.753,1.492,9.176,4.316,6.352c2.824-2.824,7.402-2.824,10.226,0L16,7.809l1.458-1.458   c2.824-2.824,7.402-2.824,10.226,0c2.824,2.824,2.824,7.401,0,10.225L16,28.261z" fill="#FF4D6D" />
+                </svg>
+                <span class="click-me">Click to Open!</span>
+            </div>
+        </div>
+
+        <!-- The Letter / Card Inside (Centered overlay sibling to the envelope) -->
         <div class="letter" id="letter">
             <div class="letter-content">
                 <div class="sparkles">✨🌸✨</div>
@@ -69,34 +85,25 @@
                     <p class="tap-instruction">🎁 Tap a gift box for a special wish! 🎁</p>
                     <div class="gifts-grid">
                         <div class="gift-item" onclick="openGift(this)">
-                            <div class="gift-box-wrapper gift-pink">
-                                <div class="gift-bow">🎀</div>
+                            <div class="gift-box-wrapper">
                                 <div class="gift-lid"></div>
-                                <div class="gift-body">
-                                    <div class="gift-ribbon"></div>
-                                </div>
+                                <div class="gift-body"></div>
                             </div>
-                            <div class="gift-wish">🎁 <strong>Special Wish:</strong><br>May you become rich enough to buy me expensive gifts! 🤑🌟</div>
+                            <div class="gift-wish">🌟 May success & happiness follow you always!</div>
                         </div>
                         <div class="gift-item" onclick="openGift(this)">
-                            <div class="gift-box-wrapper gift-green">
-                                <div class="gift-bow">🎀</div>
+                            <div class="gift-box-wrapper">
                                 <div class="gift-lid"></div>
-                                <div class="gift-body">
-                                    <div class="gift-ribbon"></div>
-                                </div>
+                                <div class="gift-body"></div>
                             </div>
-                            <div class="gift-wish">🎂 <strong>Fun Fact:</strong><br>Birthdays are extremely healthy! The more you have, the longer you live! 😂🎈</div>
+                            <div class="gift-wish">🎂 May your day be filled with delicious cake & joy!</div>
                         </div>
                         <div class="gift-item" onclick="openGift(this)">
-                            <div class="gift-box-wrapper gift-gold">
-                                <div class="gift-bow">🎀</div>
+                            <div class="gift-box-wrapper">
                                 <div class="gift-lid"></div>
-                                <div class="gift-body">
-                                    <div class="gift-ribbon"></div>
-                                </div>
+                                <div class="gift-body"></div>
                             </div>
-                            <div class="gift-wish">💖 <strong>Reality Check:</strong><br>You are not getting older, you are just increasing in value! 🏎️✨</div>
+                            <div class="gift-wish">💖 Wishing you beautiful memories with loved ones!</div>
                         </div>
                     </div>
                     
@@ -109,22 +116,6 @@
                 </div>
 
                 <div class="heart-signature">✨ Made with love for Yossef ✨</div>
-            </div>
-        </div>
-
-        <!-- The Interactive Envelope -->
-        <div class="envelope-wrapper" id="envelope-wrapper">
-            <div class="envelope" id="envelope">
-                <div class="flap"></div>
-                <div class="pocket"></div>
-            </div>
-            
-            <!-- Heart Seal / Button to open -->
-            <div class="heart-seal" id="heart-seal">
-                <svg viewBox="0 0 32 32" class="seal-heart">
-                    <path d="M16,28.261L4.316,16.577C1.492,13.753,1.492,9.176,4.316,6.352c2.824-2.824,7.402-2.824,10.226,0L16,7.809l1.458-1.458   c2.824-2.824,7.402-2.824,10.226,0c2.824,2.824,2.824,7.401,0,10.225L16,28.261z" fill="#FF4D6D" />
-                </svg>
-                <span class="click-me">Click to Open!</span>
             </div>
         </div>
     </div>
