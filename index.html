@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Yossef! 🎂</title>
+    <!-- Google Fonts for Cute and Bubbly Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Sacramento&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Canvas for Confetti & Particles -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Floating Background Elements Container -->
+    <div class="floating-bg" id="floating-bg"></div>
+
+    <!-- Music Control Button -->
+    <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="music-icon">
+            <path fill-rule="evenodd" d="M19.952 1.951a.75.75 0 0 1 .496.694V18a3.5 3.5 0 1 1-3.5-3.5c.372 0 .733.058 1.072.165V6.308L9.75 8.682v9.318a3.5 3.5 0 1 1-3.5-3.5c.372 0 .733.058 1.072.165V4.708L19.952 1.95Z" clip-rule="evenodd" />
+        </svg>
+        <span class="music-wave" id="music-wave-1"></span>
+        <span class="music-wave" id="music-wave-2"></span>
+        <span class="music-wave" id="music-wave-3"></span>
+    </button>
+
+    <!-- Main Container -->
+    <div class="container" id="main-container">
+        <!-- The Letter / Card Inside (Listed first so it stacks vertically ABOVE the envelope) -->
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <div class="sparkles">✨🌸✨</div>
+                <h2 class="cursive-text">Happy Birthday</h2>
+                <h1 class="bold-text">to yossef hasssn</h1>
+                
+                <!-- Cute SVG Birthday Cake -->
+                <div class="cake-container">
+                    <svg viewBox="0 0 100 100" class="cake">
+                        <!-- Plate -->
+                        <path d="M 10 80 Q 50 90 90 80 Q 90 85 50 90 Q 10 85 10 80 Z" fill="#E2CFC4" />
+                        <!-- Cake Bottom Layer -->
+                        <rect x="20" y="55" width="60" height="25" rx="5" fill="#FFB5A7" />
+                        <path d="M 20 65 Q 30 70 40 65 Q 50 60 60 65 Q 70 70 80 65 L 80 55 L 20 55 Z" fill="#FFCAD4" />
+                        <!-- Cake Top Layer -->
+                        <rect x="25" y="35" width="50" height="22" rx="4" fill="#F4ACB7" />
+                        <path d="M 25 43 Q 35 48 45 43 Q 55 38 65 43 Q 75 48 75 43 L 75 35 L 25 35 Z" fill="#FFCAD4" />
+                        <!-- Cream Dollops -->
+                        <circle cx="30" cy="35" r="3" fill="#FFF" />
+                        <circle cx="40" cy="35" r="3" fill="#FFF" />
+                        <circle cx="50" cy="35" r="3" fill="#FFF" />
+                        <circle cx="60" cy="35" r="3" fill="#FFF" />
+                        <circle cx="70" cy="35" r="3" fill="#FFF" />
+                        <!-- Candle -->
+                        <rect x="47" y="18" width="6" height="18" rx="2" fill="#9A8C98" />
+                        <path d="M 47 22 L 53 22" stroke="#FFF" stroke-width="1.5" />
+                        <path d="M 47 28 L 53 28" stroke="#FFF" stroke-width="1.5" />
+                        <!-- Candle Flame -->
+                        <path class="flame" d="M 50 6 C 47 12 47 18 50 18 C 53 18 53 12 50 6 Z" fill="#FFB703" />
+                    </svg>
+                </div>
+                
+                <p class="wishes">Wishing you a year filled with sweet surprises, bright smiles, and beautiful moments! Hope your day is as wonderful as you are! 💖</p>
+                
+                <!-- Interactive Extra Details -->
+                <div class="extra-details">
+                    <p class="tap-instruction">🎁 Tap a gift box for a special wish! 🎁</p>
+                    <div class="gifts-grid">
+                        <div class="gift-item" onclick="openGift(this)">
+                            <div class="gift-box-wrapper gift-pink">
+                                <div class="gift-bow">🎀</div>
+                                <div class="gift-lid"></div>
+                                <div class="gift-body">
+                                    <div class="gift-ribbon"></div>
+                                </div>
+                            </div>
+                            <div class="gift-wish">🎁 <strong>Special Wish:</strong><br>May you become rich enough to buy me expensive gifts! 🤑🌟</div>
+                        </div>
+                        <div class="gift-item" onclick="openGift(this)">
+                            <div class="gift-box-wrapper gift-green">
+                                <div class="gift-bow">🎀</div>
+                                <div class="gift-lid"></div>
+                                <div class="gift-body">
+                                    <div class="gift-ribbon"></div>
+                                </div>
+                            </div>
+                            <div class="gift-wish">🎂 <strong>Fun Fact:</strong><br>Birthdays are extremely healthy! The more you have, the longer you live! 😂🎈</div>
+                        </div>
+                        <div class="gift-item" onclick="openGift(this)">
+                            <div class="gift-box-wrapper gift-gold">
+                                <div class="gift-bow">🎀</div>
+                                <div class="gift-lid"></div>
+                                <div class="gift-body">
+                                    <div class="gift-ribbon"></div>
+                                </div>
+                            </div>
+                            <div class="gift-wish">💖 <strong>Reality Check:</strong><br>You are not getting older, you are just increasing in value! 🏎️✨</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cute Friendship Badges -->
+                    <div class="badges-container">
+                        <span class="badge">👑 Best Friend</span>
+                        <span class="badge">⭐ Super Star</span>
+                        <span class="badge">☀️ Sunshine</span>
+                    </div>
+                </div>
+
+                <div class="heart-signature">✨ Made with love for Yossef ✨</div>
+            </div>
+        </div>
+
+        <!-- The Interactive Envelope -->
+        <div class="envelope-wrapper" id="envelope-wrapper">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+            </div>
+            
+            <!-- Heart Seal / Button to open -->
+            <div class="heart-seal" id="heart-seal">
+                <svg viewBox="0 0 32 32" class="seal-heart">
+                    <path d="M16,28.261L4.316,16.577C1.492,13.753,1.492,9.176,4.316,6.352c2.824-2.824,7.402-2.824,10.226,0L16,7.809l1.458-1.458   c2.824-2.824,7.402-2.824,10.226,0c2.824,2.824,2.824,7.401,0,10.225L16,28.261z" fill="#FF4D6D" />
+                </svg>
+                <span class="click-me">Click to Open!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Entry -->
+    <script src="script.js"></script>
+</body>
+</html>

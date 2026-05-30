@@ -1,0 +1,732 @@
+/* --- Design Tokens & Root variables --- */
+:root {
+    --bg-gradient: linear-gradient(135deg, #FFE5EC 0%, #FFCAD4 50%, #F4ACB7 100%);
+    --primary-pink: #FF4D6D;
+    --pastel-pink-light: #FFE5EC;
+    --pastel-pink-medium: #FFCAD4;
+    --pastel-pink-dark: #F4ACB7;
+    --cream: #FFF0F5;
+    --shadow-color: rgba(244, 172, 183, 0.4);
+    --gold: #FFB703;
+    --font-heading: 'Sacramento', cursive;
+    --font-body: 'Fredoka', sans-serif;
+}
+
+/* --- Resets & Setup --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 
+  LAYOUT CORRECTIVE RULE: 
+  Eliminate all page scrolling exactly as specified.
+*/
+html, body {
+    margin: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    background: var(--bg-gradient);
+    font-family: var(--font-body);
+    position: relative;
+    width: 100%;
+}
+
+/* --- Confetti Canvas --- */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 15;
+}
+
+/* --- Floating Background --- */
+.floating-bg {
+    /* 
+      LAYOUT CORRECTIVE RULE: 
+      Floating decorations are position absolute, pointer-events none, 
+      and styled to never impact layout.
+    */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.floating-item {
+    position: absolute;
+    bottom: -50px;
+    opacity: 0.6;
+    animation: floatUp 15s linear infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-110vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* --- Music Button --- */
+.music-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 2px solid var(--primary-pink);
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    background: #fff;
+}
+
+.music-btn:active {
+    transform: scale(0.9);
+}
+
+.music-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-pink);
+    z-index: 2;
+}
+
+/* Music Playing Waves Animation */
+.music-wave {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--primary-pink);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.music-btn.playing #music-wave-1 {
+    animation: wavePulse 2s linear infinite;
+}
+.music-btn.playing #music-wave-2 {
+    animation: wavePulse 2s linear infinite 0.6s;
+}
+.music-btn.playing #music-wave-3 {
+    animation: wavePulse 2s linear infinite 1.2s;
+}
+
+@keyframes wavePulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* 
+  LAYOUT CORRECTIVE RULE:
+  Use a single parent container with flex layout to perfectly center
+  all content vertically and horizontally inside 100vh.
+*/
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+    z-index: 5;
+}
+
+/* 
+  LAYOUT CORRECTIVE RULE:
+  Responsive envelope width: width: min(90vw, 600px);
+*/
+.envelope-wrapper {
+    position: relative;
+    width: min(90vw, 600px);
+    height: 220px; /* compact envelope height to fit the stack perfectly */
+    perspective: 1000px;
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 
+  LAYOUT CORRECTIVE RULE: 
+  The envelope wrapper does NOT disappear when open! It stays visible underneath the card.
+*/
+.envelope-wrapper.open {
+    pointer-events: none;
+}
+
+/* Main Envelope Box */
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--pastel-pink-dark);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 15px 35px var(--shadow-color);
+}
+
+/* 
+  LAYOUT CORRECTIVE RULE:
+  Instead of fragile hardcoded borders, we use CSS clip-path to draw a perfectly 
+  responsive triangle flap that scales dynamically alongside the envelope width!
+*/
+.envelope .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 110px; /* exactly half of envelope height */
+    background-color: var(--pastel-pink-dark);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    z-index: 4;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.6s ease;
+}
+
+.envelope-wrapper.open .envelope .flap {
+    transform: rotateX(180deg);
+    background-color: var(--pastel-pink-medium);
+}
+
+/* Pocket (Front diagonal folds) */
+.envelope .pocket {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top right, var(--pastel-pink-medium) 50%, var(--pastel-pink-light) 50%);
+    /* Perfectly responsive front fold clip path */
+    clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0, 50% 65%);
+    border-radius: 0 0 10px 10px;
+    z-index: 3;
+}
+
+/* 
+  LAYOUT CORRECTIVE RULE:
+  Ensure the card width is responsive: width: min(90vw, 500px);
+  We center it vertically in the flex stack by listing it before the envelope.
+  This completely removes all top margins, negative margins, and upward translateY translations that pushed content outside the viewport!
+*/
+.letter {
+    position: relative;
+    width: min(90vw, 500px);
+    height: 0;
+    opacity: 0;
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 0 20px;
+    border: 0 dashed transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    
+    /* Scroll inside the letter only if content overflows the card size */
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    z-index: 10;
+    margin-bottom: 0;
+    transition: height 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.6s ease, margin-bottom 0.6s ease, padding 0.6s ease, border 0.6s ease, box-shadow 0.6s ease;
+    pointer-events: none;
+    
+    scrollbar-width: thin;
+    scrollbar-color: var(--pastel-pink-medium) transparent;
+}
+
+/* Custom Scrollbar for letter */
+.letter::-webkit-scrollbar {
+    width: 5px;
+}
+.letter::-webkit-scrollbar-track {
+    background: transparent;
+}
+.letter::-webkit-scrollbar-thumb {
+    background-color: var(--pastel-pink-medium);
+    border-radius: 10px;
+}
+
+/* Revealed Card State - Stacked ABOVE the envelope with proper spacing */
+.container.open-card .letter {
+    height: min(45vh, 340px);
+    opacity: 1;
+    margin-bottom: 25px; /* Perfect spacing above the envelope */
+    padding: 25px 20px;
+    border: 3px dashed var(--pastel-pink-dark);
+    box-shadow: 0 15px 35px var(--shadow-color);
+    pointer-events: auto;
+}
+
+.letter-content {
+    text-align: center;
+    width: 100%;
+}
+
+/* --- Extra Details & Interactive Gifts --- */
+.extra-details {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease 0.4s, max-height 0.8s ease 0.2s, margin-top 0.5s;
+}
+
+.container.open-card .extra-details {
+    opacity: 1;
+    max-height: 300px;
+    margin-top: 15px;
+}
+
+.tap-instruction {
+    font-size: 0.75rem;
+    color: var(--primary-pink);
+    font-weight: 600;
+    margin-bottom: 12px;
+    animation: bounceMini 2s infinite;
+}
+
+@keyframes bounceMini {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.gifts-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 15px 0 20px 0;
+}
+
+.gift-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    width: 50px;
+}
+
+.gift-box-wrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s ease;
+}
+
+.gift-item:hover .gift-box-wrapper {
+    transform: scale(1.1);
+}
+
+/* Color themes for styled gift boxes */
+.gift-pink .gift-lid { background: #FF4D6D; }
+.gift-pink .gift-body { background: #FFCAD4; border-color: #FF4D6D; }
+.gift-pink .gift-ribbon { background: #FF4D6D; }
+
+.gift-green .gift-lid { background: #2EC4B6; }
+.gift-green .gift-body { background: #CBF3F0; border-color: #2EC4B6; }
+.gift-green .gift-ribbon { background: #2EC4B6; }
+
+.gift-gold .gift-lid { background: #FFB703; }
+.gift-gold .gift-body { background: #FFE066; border-color: #FFB703; }
+.gift-gold .gift-ribbon { background: #FFB703; }
+
+.gift-bow {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) scale(1);
+    font-size: 1.15rem;
+    z-index: 5;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.gift-item:hover .gift-bow {
+    transform: translateX(-50%) scale(1.2) rotate(5deg);
+}
+
+.gift-item.open-gift .gift-bow {
+    transform: translateX(-50%) translateY(-25px) rotate(-15deg) scale(0.8);
+    opacity: 0;
+}
+
+.gift-lid {
+    position: absolute;
+    top: 0;
+    left: -2px;
+    width: 44px;
+    height: 10px;
+    border-radius: 3px;
+    z-index: 2;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+}
+
+.gift-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 32px;
+    border: 2px solid;
+    border-radius: 0 0 5px 5px;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Ribbon Stripe on gift body */
+.gift-ribbon {
+    position: absolute;
+    top: 0;
+    left: 15px; /* Centered stripe */
+    width: 6px;
+    height: 100%;
+    z-index: 2;
+}
+
+/* Opening Gift animation */
+.gift-item.open-gift .gift-lid {
+    transform: translateY(-28px) rotate(-25deg) scale(0.8);
+    opacity: 0;
+}
+
+.gift-item.open-gift .gift-box-wrapper {
+    transform: scale(0.95);
+}
+
+/* Pop up wish message balloon */
+.gift-wish {
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%) translateY(15px) scale(0.7);
+    background: #FFF;
+    color: #4A4A4A;
+    border: 1px solid var(--pastel-pink-medium);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.45;
+    width: 170px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(255, 77, 109, 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 15;
+}
+
+.gift-wish strong {
+    color: var(--primary-pink);
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
+/* Speech bubble arrow */
+.gift-wish::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-style: solid;
+    border-color: #FFF transparent;
+    display: block;
+    width: 0;
+}
+
+.gift-item.open-gift .gift-wish {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Friendship Badges */
+.badges-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 8px;
+    margin: 15px 0 10px 0;
+}
+
+.badge {
+    background: var(--pastel-pink-light);
+    color: var(--primary-pink);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--pastel-pink-medium);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.badge:hover {
+    background: var(--primary-pink);
+    color: #FFF;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(255, 77, 109, 0.2);
+}
+
+.sparkles {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: var(--primary-pink);
+    animation: sparkleGlow 2s ease-in-out infinite;
+}
+
+@keyframes sparkleGlow {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+
+.cursive-text {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--primary-pink);
+    line-height: 1.1;
+    margin-bottom: 2px;
+    text-shadow: 1px 1px 2px rgba(255, 77, 109, 0.1);
+}
+
+.bold-text {
+    font-size: 1.8rem;
+    color: #4A4A4A;
+    text-transform: capitalize;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.bold-text::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: var(--pastel-pink-medium);
+    border-radius: 2px;
+}
+
+.cake-container {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 12px auto;
+}
+
+.cake {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.flame {
+    animation: flicker 0.15s ease-in-out infinite alternate;
+    transform-origin: center bottom;
+}
+
+@keyframes flicker {
+    0% { transform: scale(1) rotate(-1deg); filter: brightness(1); }
+    100% { transform: scale(1.1) rotate(1.2deg); filter: brightness(1.2); }
+}
+
+.wishes {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #6C757D;
+    margin-bottom: 10px;
+    padding: 0 10px;
+}
+
+.heart-signature {
+    font-size: 0.75rem;
+    color: var(--primary-pink);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    animation: pulseMini 1.5s infinite;
+}
+
+@keyframes pulseMini {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* --- Heart Seal --- */
+.heart-seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -30px) scale(1);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s ease;
+}
+
+.seal-heart {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 4px 8px rgba(255, 77, 109, 0.4));
+    animation: heartBeat 1.2s infinite;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.seal-heart:hover {
+    transform: scale(1.15);
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.1); }
+    40% { transform: scale(1.05); }
+    60% { transform: scale(1.15); }
+}
+
+.click-me {
+    margin-top: 8px;
+    background: #fff;
+    color: var(--primary-pink);
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 3px 10px var(--shadow-color);
+    pointer-events: none;
+    white-space: nowrap;
+    animation: pulseMini 1.5s infinite;
+}
+
+/* Fade out heart seal when open */
+.envelope-wrapper.open .heart-seal {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -30px) scale(0);
+}
+
+/* Custom interactive wiggle before open on hover */
+.envelope-wrapper:not(.open):hover .envelope {
+    transform: translateY(-4px) rotate(0.5deg);
+}
+
+/* --- Media Queries / Responsiveness --- */
+@media (max-width: 480px) {
+    .cursive-text {
+        font-size: 2.5rem;
+    }
+    
+    .bold-text {
+        font-size: 1.5rem;
+    }
+    
+    .wishes {
+        font-size: 0.75rem;
+        line-height: 1.35;
+    }
+    
+    .cake-container {
+        width: 65px;
+        height: 65px;
+        margin-bottom: 8px;
+    }
+    
+    .music-btn {
+        top: 15px;
+        right: 15px;
+        width: 46px;
+        height: 46px;
+    }
+    
+    .music-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .gifts-grid {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .cursive-text {
+        font-size: 2.2rem;
+    }
+    
+    .bold-text {
+        font-size: 1.3rem;
+    }
+
+    .gift-item {
+        width: 40px;
+    }
+
+    .gift-box-wrapper {
+        width: 34px;
+        height: 34px;
+    }
+
+    .gift-lid {
+        width: 38px;
+        height: 8px;
+    }
+
+    .gift-body {
+        width: 34px;
+        height: 27px;
+    }
+
+    .gifts-grid {
+        gap: 10px;
+    }
+
+    .gift-wish {
+        width: 110px;
+        font-size: 0.65rem;
+        padding: 6px 8px;
+    }
+}
