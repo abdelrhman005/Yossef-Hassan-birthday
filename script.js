@@ -319,4 +319,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         }
     };
+
+    // Close gifts when clicking anywhere else
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.gift-item')) {
+            document.querySelectorAll('.gift-item').forEach(item => {
+                item.classList.remove('open-gift');
+            });
+        }
+    });
 });

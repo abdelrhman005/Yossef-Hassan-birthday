@@ -91,8 +91,8 @@ body {
 /* --- Music Button --- */
 .music-btn {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: max(20px, env(safe-area-inset-top));
+    right: max(20px, env(safe-area-inset-right));
     background: rgba(255, 255, 255, 0.75);
     border: 2px solid var(--primary-pink);
     border-radius: 50%;
@@ -180,7 +180,8 @@ body {
 .envelope-wrapper {
     position: absolute;
     width: min(90vw, 600px);
-    height: 380px;
+    aspect-ratio: 1.6 / 1;
+    height: auto;
     perspective: 1000px;
     cursor: pointer;
     z-index: 5;
@@ -214,7 +215,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 180px; /* flap height */
+    height: 48%; /* Scaled dynamically with envelope height */
     background-color: var(--pastel-pink-dark);
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     transform-origin: top;
@@ -355,6 +356,10 @@ body {
     transform: scale(1.1);
 }
 
+.gift-item:active .gift-box-wrapper {
+    transform: scale(0.95);
+}
+
 .gift-lid {
     position: absolute;
     top: 0;
@@ -440,6 +445,16 @@ body {
     transform: translate(-50%, -50%) scale(1);
 }
 
+.close-hint {
+    display: block;
+    font-size: 0.65rem;
+    color: #FF758F;
+    margin-top: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* Friendship Badges */
 .badges-container {
     display: flex;
@@ -458,7 +473,10 @@ body {
     border-radius: 12px;
     border: 1px solid var(--pastel-pink-medium);
     transition: all 0.3s ease;
-    white-space: nowrap;
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+    text-align: center;
 }
 
 .badge:hover {
@@ -556,9 +574,9 @@ body {
 /* --- Heart Seal --- */
 .heart-seal {
     position: absolute;
-    top: 50%;
+    top: 47%;
     left: 50%;
-    transform: translate(-50%, -30px) scale(1);
+    transform: translate(-50%, -50%) scale(1);
     z-index: 5;
     display: flex;
     flex-direction: column;
@@ -577,6 +595,10 @@ body {
 
 .seal-heart:hover {
     transform: scale(1.15);
+}
+
+.seal-heart:active {
+    transform: scale(0.9);
 }
 
 @keyframes heartBeat {
@@ -604,7 +626,7 @@ body {
 .envelope-wrapper.open .heart-seal {
     opacity: 0;
     pointer-events: none;
-    transform: translate(-50%, -30px) scale(0);
+    transform: translate(-50%, -50%) scale(0);
 }
 
 /* Custom interactive wiggle before open on hover */
@@ -615,27 +637,30 @@ body {
 /* --- Media Queries / Responsiveness --- */
 @media (max-width: 480px) {
     .cursive-text {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
     .bold-text {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 8px;
     }
     
     .wishes {
         font-size: 0.75rem;
-        line-height: 1.35;
+        line-height: 1.3;
+        margin-bottom: 8px;
+        padding: 0 5px;
     }
     
     .cake-container {
-        width: 65px;
-        height: 65px;
-        margin-bottom: 8px;
+        width: 55px;
+        height: 55px;
+        margin-bottom: 6px;
     }
     
     .music-btn {
-        top: 15px;
-        right: 15px;
+        top: max(15px, env(safe-area-inset-top));
+        right: max(15px, env(safe-area-inset-right));
         width: 46px;
         height: 46px;
     }
@@ -645,18 +670,50 @@ body {
         height: 20px;
     }
 
+    .letter {
+        padding: 20px 15px;
+        height: min(85vh, 480px);
+    }
+
+    .container.open-card .extra-details {
+        margin-top: 10px;
+        max-height: 250px;
+    }
+
     .gifts-grid {
         gap: 15px;
+        margin: 10px 0 12px 0;
+    }
+
+    .badge {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    .seal-heart {
+        width: 50px;
+        height: 50px;
+    }
+
+    .click-me {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    .gift-wish {
+        width: min(85vw, 280px);
+        font-size: 0.85rem;
+        padding: 15px 20px;
     }
 }
 
 @media (max-width: 360px) {
     .cursive-text {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
     
     .bold-text {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .gift-item {
@@ -683,8 +740,8 @@ body {
     }
 
     .gift-wish {
-        width: 110px;
-        font-size: 0.65rem;
-        padding: 6px 8px;
+        width: min(85vw, 260px);
+        font-size: 0.8rem;
+        padding: 12px 15px;
     }
 }
